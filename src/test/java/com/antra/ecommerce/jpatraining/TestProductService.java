@@ -20,4 +20,18 @@ public class TestProductService {
     void testUpdate() {
         productService.updateOrder();
     }
+
+    @Test
+    void testGetProduct() throws InterruptedException {
+        System.out.println(productService.getProduct(9));
+        System.out.println(productService.getProduct(9));
+
+
+        Thread.sleep(10000);
+
+        System.out.println(productService.getProduct(9));
+        System.out.println(productService.getProduct(9));
+        System.out.println(productService.getProduct(9));
+        System.out.println(productService.getProduct(9));
+    }
 }
