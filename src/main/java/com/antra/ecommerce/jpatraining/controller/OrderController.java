@@ -3,7 +3,7 @@ package com.antra.ecommerce.jpatraining.controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/order")
 public class OrderController {
 
     @GetMapping // ALL ORDERS: Pagination
@@ -34,6 +34,10 @@ public class OrderController {
     // Logging
     // Security
     // Data response/status code
+
+    // document
+    // test
+    // versioning
 }
 
 
