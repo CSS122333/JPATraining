@@ -1,16 +1,15 @@
 package com.antra.ecommerce.jpatraining.controller;
 
 import com.antra.ecommerce.jpatraining.api.request.ProductVO;
-import com.antra.ecommerce.jpatraining.entity.Product;
 import com.antra.ecommerce.jpatraining.exception.ProductErrorResponse;
 import com.antra.ecommerce.jpatraining.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/product")
+@Slf4j
 public class ProductController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<ProductVO>> getProduct(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "size", defaultValue = "3") int size) {
-
+        log.debug("Get product with page: {} and size: {}", page, size);
         var products = productService.getAllProducts(page, size).stream().map(p -> {
             ProductVO vo = new ProductVO();
             BeanUtils.copyProperties(p, vo);
@@ -41,7 +41,7 @@ public class ProductController {
         if(products.isEmpty()) {
             throw new RuntimeException("No product found");
         }
-
+        log.debug("Get product successfully {}", products);
         return ResponseEntity.ok(products);
     }
     // GET /product pagination
@@ -54,6 +54,23 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productVO);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductVO> getProductById(@PathVariable("id") Integer id) {
+        ProductVO p = productService.getProduct(id);
+        return ResponseEntity.ok(p);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ProductVO> deleteProduct(@PathVariable("id") Integer id) {
+        ProductVO p = productService.deleteProduct(id);
+        return ResponseEntity.ok(p);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductVO> updateProduct(@PathVariable("id") Integer id, @RequestBody ProductVO productVO) {
+        ProductVO p = productService.updateProduct(productVO);
+        return ResponseEntity.ok(p);
+    }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ProductErrorResponse> handleException(RuntimeException e) {
@@ -75,7 +92,8 @@ public class ProductController {
     public ResponseEntity<ProductErrorResponse> handleException(Exception e) {
         var response = new ProductErrorResponse();
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        response.setMessage(e.getCause().getMessage());
+        response.setMessage(e.getMessage());
+        log.error("Internal server error", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 

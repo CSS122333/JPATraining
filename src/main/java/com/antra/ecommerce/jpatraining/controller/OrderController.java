@@ -1,5 +1,6 @@
 package com.antra.ecommerce.jpatraining.controller;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,10 +30,11 @@ public class OrderController {
     public void deleteOrder() {
 
     }
+    // design
     // Validation
     // Exception Handling
     // Logging
-    // Security
+    // Security - API Key, Token JWT "Header Authorization"
     // Data response/status code
 
     // document

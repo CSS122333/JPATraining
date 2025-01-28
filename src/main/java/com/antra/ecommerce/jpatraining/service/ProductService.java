@@ -52,18 +52,23 @@ public class ProductService{
         productRepo.save(p);
     }
 
-    public Product getProduct(Integer id) { // 1.2.3.4
-        Product p = (Product) redisTemplate.opsForValue().get("product:" + id); // product:1
+    public ProductVO getProduct(Integer id) { // 1.2.3.4
+        ProductVO p = (ProductVO) redisTemplate.opsForValue().get("product:" + id); // product:1
         if (p == null) {
-            p = productRepo.findById(id).get();
-            redisTemplate.opsForValue().set("product:" + id, p, Duration.ofSeconds(10));
+            var product = productRepo.findById(id).get();
+            p = new ProductVO();
+            BeanUtils.copyProperties(product, p);
+            redisTemplate.opsForValue().set("product:" + id, p, Duration.ofSeconds(120));
         }
         return p;
     }
 
-    public void updateProduct(Product product) {
+    public ProductVO updateProduct(ProductVO productvo) {
+        Product product = new Product();
+        BeanUtils.copyProperties(productvo, product);
         productRepo.save(product);
-        redisTemplate.opsForValue().set("product:" + product.getId(), product, Duration.ofSeconds(10));
+        redisTemplate.opsForValue().set("product:" + product.getId(), product, Duration.ofSeconds(120));
+        return productvo;
     }
 
     public List<Product> getAllProducts() {
@@ -72,5 +77,11 @@ public class ProductService{
 
     public List<Product> getAllProducts(int page, int size) {
         return productRepo.findAll(Pageable.ofSize(size).withPage(page - 1)).stream().toList();
+    }
+
+    public ProductVO deleteProduct(Integer id) {
+        var p = this.getProduct(id);
+        productRepo.deleteById(id);
+        return p;
     }
 }

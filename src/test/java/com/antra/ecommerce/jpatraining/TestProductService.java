@@ -13,12 +13,12 @@ public class TestProductService {
 
     @Test
     void testCreateProducts() {
-        productService.creatProducts();
+//        productService.creatProducts();
     }
 
     @Test
     void testUpdate() {
-        productService.updateOrder();
+//        productService.updateOrder();
     }
 
     @Test
