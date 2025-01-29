@@ -13,11 +13,25 @@ public class TestProductService {
 
     @Test
     void testCreateProducts() {
-        productService.creatProducts();
+//        productService.creatProducts();
     }
 
     @Test
     void testUpdate() {
-        productService.updateOrder();
+//        productService.updateOrder();
+    }
+
+    @Test
+    void testGetProduct() throws InterruptedException {
+        System.out.println(productService.getProduct(9));
+        System.out.println(productService.getProduct(9));
+
+
+        Thread.sleep(10000);
+
+        System.out.println(productService.getProduct(9));
+        System.out.println(productService.getProduct(9));
+        System.out.println(productService.getProduct(9));
+        System.out.println(productService.getProduct(9));
     }
 }

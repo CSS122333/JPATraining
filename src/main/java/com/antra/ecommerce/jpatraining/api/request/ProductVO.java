@@ -1,16 +1,18 @@
-package com.antra.ecommerce.jpatraining.entity;
+package com.antra.ecommerce.jpatraining.api.request;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 
-@Entity
-@Table(name = "product")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProductVO {
     private Integer id;
+    @NotEmpty(message = "Name cannot be empty")
     private String name;
     private String description;
     private Double price;
+
+    public ProductVO() {
+    }
 
     public Integer getId() {
         return id;
@@ -43,14 +45,11 @@ public class Product {
     public void setPrice(Double price) {
         this.price = price;
     }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                '}';
-    }
 }
+
+
+
+// VO
+// POJO
+// DTO
+// BO
